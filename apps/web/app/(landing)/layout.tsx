@@ -3,10 +3,10 @@ export default function RootLayout({children}: {
 }) {
     return (
         <>
-            <header>
+            <header className="p-2 font-bold">
                 Esida
             </header>
-            <main>
+            <main className="p-2">
                 {children}
             </main>
         </>
