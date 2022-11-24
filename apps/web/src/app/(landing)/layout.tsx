@@ -1,7 +1,8 @@
 import Link from "next/link";
 import Image from "next/image";
+import User from "./user";
 
-export default function RootLayout({children}: {
+export default async function LandingLayout({children}: {
     children: React.ReactNode;
 }) {
     return (
@@ -11,7 +12,7 @@ export default function RootLayout({children}: {
                     <Image alt="esida logo" src="/assets/images/logo.png" width={36} height={36} quality={100} />
                     <span className="sm:block hidden">esida</span>
                 </Link>
-                <span>Log in</span>
+                <User />
             </header>
             <main>
                 {children}
