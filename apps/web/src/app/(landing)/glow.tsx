@@ -23,11 +23,9 @@ export default function GlowCanvas() {
     useEffect(() => {
         const colors = [
             "#557AFC66",
-            "#557AFC44",
-            "#604CE044",
             "#604CE066",
         ];
-        
+
         const animate = () => {
             const ctx = canvas.current?.getContext("2d");
             if (!ctx || !canvas.current) return;
@@ -43,13 +41,9 @@ export default function GlowCanvas() {
                 circle.position.x += circle.velocity.x;
                 circle.position.y += circle.velocity.y;
 
-                // Update circle radius (it grows more if it's closer to the center)
-                circle.radius += 0.1 * (1 - Math.abs(circle.position.x) / (canvas.current.width / 2));
+                // Update circle radius
+                circle.radius += Math.random() * 0.5 - 0.15;
                 circle.radius = Math.max(1, Math.min(100, circle.radius));
-
-                // Update circle glow
-                circle.glow += 0.1 * (1 - Math.abs(circle.position.x) / (canvas.current.width / 2));
-                circle.glow = Math.max(30, Math.min(280, circle.glow));
 
                 // Update circle velocity
                 circle.velocity.x += (Math.random() - 0.5) * 0.03;
@@ -58,9 +52,8 @@ export default function GlowCanvas() {
                 circle.velocity.x = Math.max(-0.1, Math.min(0.1, circle.velocity.x));
                 circle.velocity.y = Math.max(-0.1, Math.min(0.1, circle.velocity.y));
 
-                // Update color alpha (it gets more transparent if it's closer to the center)
-                const alpha = Math.floor(Math.min(Math.max(1 - Math.abs(circle.position.x) / (canvas.current.width / 2), 0.1), 0.2) * 256);
-                circle.color = circle.color.slice(0, 7) + alpha.toString(16);
+                // Update circle color
+                circle.color = circle.color.slice(0, 7) + Math.floor(255 - (circle.radius * 1.28) - 64).toString(16);
 
                 // Check if circle is out of bounds
                 if (circle.position.x > canvas.current.width / 2 + 100 || circle.position.x < -canvas.current.width / 2 - 100
@@ -74,7 +67,7 @@ export default function GlowCanvas() {
                 ctx.beginPath();
                 ctx.arc(canvas.current.width / 2 + circle.position.x, canvas.current.height / 2 + circle.position.y, circle.radius, 0, 2 * Math.PI);
                 ctx.fill();
-                ctx.filter = `blur(${circle.glow}px)`;
+                ctx.filter = `blur(${circle.radius * 1.1}px)`;
             }
 
             // Delete circles that are out of bounds
@@ -109,8 +102,8 @@ export default function GlowCanvas() {
         const resize = () => {
             if (!canvas.current) return;
 
-            canvas.current.width = window.innerWidth - 16;
-            canvas.current.height = window.innerHeight;
+            canvas.current.width = window.document.body.clientWidth;
+            canvas.current.height = window.document.body.clientHeight;
         }
 
         resize();
